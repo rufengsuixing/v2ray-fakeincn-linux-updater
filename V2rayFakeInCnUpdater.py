@@ -43,16 +43,21 @@ with open(config_path,"r") as cf:
             cf2.write(configstr)
 for num in range(0,len(config['routing']['settings']['rules'])):
     rule=config['routing']['settings']['rules'][num]
+    count=0
     if 'domain' in rule:
         for dom in rule['domain']:
             if dom in domainli:
-                config['routing']['settings']['rules'][num]["domain"]=domainli
-                break
+                count+=1
+                if count>10:
+                    config['routing']['settings']['rules'][num]["domain"]=domainli
+                    break
     elif 'ip' in rule:
         for ip in rule['ip']:
             if ip in ipli:
-                config['routing']['settings']['rules'][num]["ip"]=ipli
-                break
+                count+=1
+                if count>10:
+                    config['routing']['settings']['rules'][num]["ip"]=ipli
+                    break
 with open(tmproot+'/v2rayconfig.tmp','w') as wriin:
     json.dump(config,wriin,indent=2)
 if os.path.exists(r'/usr/bin/v2ray/v2ctl'):
